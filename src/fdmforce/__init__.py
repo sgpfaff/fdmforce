@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from . import constants
 from .backgrounds import FDMBackground
+from .halo import FDMHalo
 
 __version__ = "0.0.1"
-__all__ = ["FDMBackground", "constants", "__version__"]
+__all__ = ["FDMBackground", "FDMHalo", "constants", "__version__"]
