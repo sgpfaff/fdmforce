@@ -9,7 +9,17 @@
 
 Fuzzy Dark Matter (FDM) — an ultralight boson with mass $m \sim 10^{-22}$ eV and a kpc-scale de
 Broglie wavelength — forms halos with a **solitonic core** and a **granular, time-fluctuating
-envelope**. The granule interference produces stochastic gravitational forces that dynamically
+envelope**.
+
+<figure markdown>
+  ![FDM granules flickering and drifting](assets/granules.gif){ width="440" }
+  <figcaption>The FDM envelope isn't smooth: quantum interference makes kpc-scale density
+  <b>granules</b> that flicker and drift on a ~10 Myr coherence time. A star orbiting through
+  this field feels a randomly fluctuating gravitational tug — the engine of FDM dynamical
+  heating. <code>fdmforce</code> reproduces exactly this, fast.</figcaption>
+</figure>
+
+The granule interference produces stochastic gravitational forces that dynamically
 heat streams, discs, and dwarf galaxies. Capturing this by directly evolving the
 Schrödinger–Poisson system costs roughly
 

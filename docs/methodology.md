@@ -15,6 +15,16 @@ anchor**, never as the production method.
 
 ## Layer 1 — Generation
 
+The mean-field halo is a Schive soliton core spliced onto an NFW envelope; the granule scale
+$\lambda_{\rm dB}$ grows outward as the velocity dispersion falls.
+
+<figure markdown>
+  ![Soliton + NFW density and the granule scale](assets/halo_structure.png)
+  <figcaption>Left: the soliton core dominates inside $r_t$, the NFW envelope outside. Right:
+  the isotropic-Jeans dispersion $\sigma(r)$ and the de Broglie (granule) scale
+  $\lambda_{\rm dB}(r)$.</figcaption>
+</figure>
+
 Two ways to build a physically-correct frozen-background field:
 
 ### 3B — Local Gaussian random field

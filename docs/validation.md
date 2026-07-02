@@ -37,6 +37,14 @@ the production generator.
 Calibrated to 3B's force variance, the surrogate reproduces the correlation *shapes* from the
 physics alone:
 
+<figure markdown>
+  ![Surrogate vs 3B force correlations](assets/surrogate_validation.png)
+  <figcaption>The surrogate (dashed) reproduces both the temporal and spatial force
+  autocorrelation of the local-GRF ground truth (solid) — calibrated only on the overall variance;
+  the correlation <em>shapes</em> come from the physics.</figcaption>
+</figure>
+
+
 | Check | Result |
 |---|---|
 | $\langle\lvert F\rvert^2\rangle$ | matched (1-parameter calibration) |
