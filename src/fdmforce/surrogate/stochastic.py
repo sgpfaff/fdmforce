@@ -35,16 +35,19 @@ from __future__ import annotations
 
 import numpy as np
 
-from ..constants import G_INTERNAL, KMS_TO_KPCGYR, hbar_over_m
+from .. import _core
+from ..constants import KMS_TO_KPCGYR, hbar_over_m
 
 
 class StochasticForceField:
     def __init__(self, m22, rho_mean, sigma_kms, n_modes=1024,
-                 k_min=None, coherence_scale=None, seed=None, amp=1.0):
+                 k_min=None, coherence_scale=None, seed=None, amp=1.0,
+                 use_c=True):
         self.m22 = float(m22)
         self.rho_mean = float(rho_mean)
         self.sigma_kms = float(sigma_kms)
         self.M = int(n_modes)
+        self.use_c = bool(use_c) and _core.available()
         self.hbar_m = hbar_over_m(self.m22, internal=True)  # kpc^2/Gyr
         sigma_int = self.sigma_kms * KMS_TO_KPCGYR
         self.k_sig = sigma_int / self.hbar_m  # 1/kpc
@@ -124,11 +127,13 @@ class StochasticForceField:
         """
         pos = np.atleast_2d(np.asarray(pos, float))
         b = self.b if b is None else b
-        phase = pos @ self.k.T                      # (N,M)
-        E = np.exp(1j * phase)                       # (N,M)
-        ab = self.a * b[:, None]                     # (M,3)
-        F = np.real(E @ ab)                          # (N,3)
-        return F
+        ab = self.a * b[:, None]                     # (M,3) complex
+        if self.use_c:
+            return _core.force_eval(pos, self.k,
+                                    np.ascontiguousarray(ab.real),
+                                    np.ascontiguousarray(ab.imag))
+        E = np.exp(1j * (pos @ self.k.T))            # (N,M)
+        return np.real(E @ ab)                        # (N,3)
 
     def potential(self, pos, b=None):
         """Fluctuating potential delta_Phi at positions ``pos`` [(kpc/Gyr)^2].
@@ -138,9 +143,12 @@ class StochasticForceField:
         """
         pos = np.atleast_2d(np.asarray(pos, float))
         b = self.b if b is None else b
-        p = -self._C / self.kmag                                 # (M,) real
-        phase = pos @ self.k.T
-        return np.real(np.exp(1j * phase) @ (p * b))
+        pb = (-self._C / self.kmag) * b                          # (M,) complex
+        if self.use_c:
+            return _core.potential_eval(pos, self.k,
+                                        np.ascontiguousarray(pb.real),
+                                        np.ascontiguousarray(pb.imag))
+        return np.real(np.exp(1j * (pos @ self.k.T)) @ pb)
 
     # --- calibration ---------------------------------------------------------
     def force_variance(self, n_sample=4096, seed=0):
